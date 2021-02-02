@@ -1,0 +1,6 @@
+applications:
+  - name: server_xsjs
+    services:
+      - cellnex-sample
+      - cellnex_xsuaa
+      - cellnex_destination

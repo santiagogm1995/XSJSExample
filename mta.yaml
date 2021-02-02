@@ -1,0 +1,53 @@
+ID: App1
+_schema-version: 3.2.0
+version: 0.0.1
+modules:
+  - name: server_approuter
+    type: nodejs
+    path: ./approuter
+    parameters:
+      disk-quota: 1024M
+      memory: 512M
+    requires:
+      - name: cellnex_xsuaa
+      - name: server_destination
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+  - name: server_xsjs
+    type: nodejs
+    path: ./server_xsjs
+    parameters:
+      disk-quota: 1024M
+      memory: 512M
+    requires:
+      - name: cellnex_xsuaa
+      - name: cellnex_destination
+      - name: cellnex-bbdd
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+resources:
+  - name: cellnex_destination
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-plan: lite
+      service: destination
+  - name: server_destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: destination
+  - name: cellnex_xsuaa
+    type: org.cloudfoundry.existing-service
+    parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+  - name: cellnex-bbdd
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-plan: hdi-shared
+      service: hana
