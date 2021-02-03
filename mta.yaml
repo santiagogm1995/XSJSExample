@@ -8,9 +8,16 @@ modules:
     parameters:
       disk-quota: 1024M
       memory: 512M
+      destinations:
+        - name: srv_api
+          type: HTTP
+          url: ~{urlXsjs/application-url}
+          proxy-type: Internet
+          forwardAuthToken: true
     requires:
       - name: cellnex_xsuaa
       - name: server_destination
+      - name: urlXsjs
     build-parameters:
       builder: custom
       commands:
@@ -18,6 +25,10 @@ modules:
   - name: server_xsjs
     type: nodejs
     path: ./server_xsjs
+    provides:
+      - name: urlXsjs
+        properties:
+          application-url: ${default-url}
     parameters:
       disk-quota: 1024M
       memory: 512M
